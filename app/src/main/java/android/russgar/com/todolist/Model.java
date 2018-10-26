@@ -62,9 +62,9 @@ public class Model {
         return Text;
     }
 
-    public String ResponceOne(String s) {
+    public ArrayList<String> ResponceOne(String s) {
         Log.d("AAAA","Model.ResponceOne:"+s);
-       List<String>StringToReturn = new ArrayList<>();
+       ArrayList<String>StringToReturn = new ArrayList<>();
 
        //List<String> keyPrases = Arrays.asList(words);
        //List<String> numlist = Arrays.asList(words);
@@ -79,8 +79,45 @@ public class Model {
         if (s.toLowerCase().contains("how are you")|| s.toLowerCase().contains("are you okay")||s.toLowerCase().contains("What's up")){
                 StringToReturn.add("I'm okay");
         }
+        if (s.toLowerCase().contains("you are stupid")){
+            StringToReturn.add("I am not stupid! I'm just too young to answer all your complicated questions. I'm like your little child.");
+        }
+        if ((s.toLowerCase().contains("she is") || s.toLowerCase().contains("he is") || s.toLowerCase().contains("name is"))){
+            int indexOfIs = 0;
+            while (s.toLowerCase().indexOf(" is ", indexOfIs+1)!= -1){
+                indexOfIs = s.toLowerCase().indexOf(" is ", indexOfIs+1);
+            }
+            if (s.toLowerCase().indexOf(" ", indexOfIs+4)!=-1){
+                Log.d("AAAA",s.substring(indexOfIs+4, s.indexOf( " ", indexOfIs+4)));
+            }
+            else{
+                Log.d("AAAA",s.substring(indexOfIs+4));
+            }
+            Log.d("AAAA",s.toString() +" , "+indexOfIs);
 
-         if ((s.contains("gexa") || s.contains("Gexa"))  && (s.contains("delete")|| s.contains("remove")||s.contains("clear") ) && (s.contains("events")||s.contains("records")||s.contains("plans")||s.contains("items"))&&(s.contains("expired")||s.contains("old")||s.contains("overdue")||s.contains("passed"))){
+        }
+        if ((s.toLowerCase().contains("she's") || s.toLowerCase().contains("he's") || s.toLowerCase().contains("it's"))){
+            int indexOfIs = 0;
+            String newName;
+            while (s.toLowerCase().indexOf("'s ", indexOfIs+1)!= -1){
+                indexOfIs = s.toLowerCase().indexOf("'s ", indexOfIs+1);
+            }
+            if (s.toLowerCase().indexOf(" ", indexOfIs+3)!=-1){
+                newName = s.substring(indexOfIs+3, s.indexOf( " ", indexOfIs+3));
+            }
+            else{
+                newName = s.substring(indexOfIs+3);
+            }
+            StringToReturn.add("Hello "+ newName+"! ");
+
+        }
+        if (s.toLowerCase().contains("what time is it now")|| s.toLowerCase().contains("could you tell me the time")){
+            StringToReturn.add("It is "+ LocalDateTime.now().toLocalTime().getHour() +" hour, "+ LocalDateTime.now().toLocalTime().getMinute()+" minutes");
+        }
+        if (s.toLowerCase().contains("what day is it today")|| s.toLowerCase().contains("what day of week is it today") || s.toLowerCase().contains("what date is it today") || (s.toLowerCase().contains("is it") && (s.toLowerCase().contains("monday") || s.toLowerCase().contains("tuesday") || s.toLowerCase().contains("wednesday") || s.toLowerCase().contains("thursday") || s.toLowerCase().contains("friday") || s.toLowerCase().contains("saturday") || s.toLowerCase().contains("sunday")) && s.toLowerCase().contains("today"))){
+            StringToReturn.add("It is "+ LocalDateTime.now().getDayOfWeek() +", "+ LocalDateTime.now().toLocalDate());
+        }
+        if (s.toLowerCase().contains("gexa")  && (s.contains("delete")|| s.contains("remove")||s.contains("clear") ) && (s.contains("events")||s.contains("records")||s.contains("plans")||s.contains("items"))&&(s.contains("expired")||s.contains("old")||s.contains("overdue")||s.contains("passed"))){
             if (overdueItemArrayList.size()==0){
                 StringToReturn.add("Hmm, you have no any averdue records. What else can I do for you today?");
             }
@@ -88,7 +125,7 @@ public class Model {
                 StringToReturn.add("Okay, I am removing all overdue records, please confirm");
                 Order = "Remove?";
             }
-         }
+        }
         if (s.contains("what") && (s.substring(5,6).matches("s") || s.substring(5,7).matches("is")) && s.contains("your name")){
             StringToReturn.add("I am Gexa!");
         }
@@ -109,30 +146,39 @@ public class Model {
 
          }
 
-         if (s.contains("my")&&(s.contains("plans")||s.contains("events")||s.contains("records")) &&(s.contains("tell")|| s.contains("remind")||s.contains("read"))&& (s.contains("for"))){
-            if (s.contains("today")){
-                StringToReturn.add("Okay!");
-                StringToReturn.add(TextToVoice("today").toString());
-            }
-            else if (s.contains("tomorrow")){
-                StringToReturn.add("Okay!");
-                TextToVoice("tomorrow");
-             }
-            else if (s.contains("old")||s.contains("expired")||s.contains("passed")||s.contains("overdue")){
-                StringToReturn.add("Okay!");
-                TextToVoice("overdue");
-            }
-            else if (s.contains("this week")){
-                StringToReturn.add("Okay!");
-                TextToVoice("week");
+         if (s.contains("my")&&(s.contains("plans")||s.contains("events")||s.contains("records")) &&(s.contains("tell")|| s.contains("remind")||s.contains("read"))){
+            if ((s.contains("for"))){
+                if (s.contains("today")){
+                    Order = "Plans";
+                    StringToReturn.add("Okay!");
+                    StringToReturn.addAll(TextToVoice("today"));
+                }
+                else if (s.contains("tomorrow")){
+                    Order = "Plans";
+                    StringToReturn.add("Okay!");
+                    StringToReturn.addAll(TextToVoice("tomorrow"));
+                }
+                else if (s.contains("this week")){
+                    Order = "Plans";
+                    StringToReturn.add("Okay!");
+                    StringToReturn.addAll(TextToVoice("week"));
 
+                }
+                else if (s.contains("this month")){
+                    Order = "Plans";
+                    StringToReturn.add("Okay!");
+                    StringToReturn.addAll(TextToVoice("month"));
+                }
             }
-            else if (s.contains("this month")){
-                StringToReturn.add("Okay!");
-                StringToReturn.add(TextToVoice("month").toString());
-            }
-            else {
-                StringToReturn.add(Sorry());
+            else{
+                if (s.contains("old")||s.contains("expired")||s.contains("passed")||s.contains("overdue")){
+                    Order = "Plans";
+                    StringToReturn.add("Okay!");
+                    StringToReturn.addAll(TextToVoice("overdue"));
+                }
+                else{
+                    StringToReturn.add(Sorry());
+                }
             }
          }
 
@@ -144,11 +190,18 @@ public class Model {
                  break;
              case "Bye":
                  break;
+             case "Plans":
+                 StringToReturn.add("Do you what me to read your any other plans?");
+                 break;
+             case"Plans_Sorry":
+                 StringToReturn.add("I can remind you your plans for today, tomorrow, this week, this month or your missed plans");
+                 StringToReturn.add("Please tell me which time you need.");
+                 break;
          }
 
 
-        String words = StringToReturn.toString();
-        return words;
+        //String words = StringToReturn.toString();
+        return StringToReturn;
     }
 
     public String ResponceDeleted(){
