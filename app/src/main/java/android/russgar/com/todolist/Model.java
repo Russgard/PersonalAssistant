@@ -84,32 +84,35 @@ public class Model {
         }
         if ((s.toLowerCase().contains("she is") || s.toLowerCase().contains("he is") || s.toLowerCase().contains("name is"))){
             int indexOfIs = 0;
+            String newName;
             while (s.toLowerCase().indexOf(" is ", indexOfIs+1)!= -1){
                 indexOfIs = s.toLowerCase().indexOf(" is ", indexOfIs+1);
             }
             if (s.toLowerCase().indexOf(" ", indexOfIs+4)!=-1){
-                Log.d("AAAA",s.substring(indexOfIs+4, s.indexOf( " ", indexOfIs+4)));
+                newName = s.substring(indexOfIs+4, s.indexOf( " ", indexOfIs+4));
             }
             else{
-                Log.d("AAAA",s.substring(indexOfIs+4));
-            }
-            Log.d("AAAA",s.toString() +" , "+indexOfIs);
-
-        }
-        if ((s.toLowerCase().contains("she's") || s.toLowerCase().contains("he's") || s.toLowerCase().contains("it's"))){
-            int indexOfIs = 0;
-            String newName;
-            while (s.toLowerCase().indexOf("'s ", indexOfIs+1)!= -1){
-                indexOfIs = s.toLowerCase().indexOf("'s ", indexOfIs+1);
-            }
-            if (s.toLowerCase().indexOf(" ", indexOfIs+3)!=-1){
-                newName = s.substring(indexOfIs+3, s.indexOf( " ", indexOfIs+3));
-            }
-            else{
-                newName = s.substring(indexOfIs+3);
+                newName = s.substring(indexOfIs+4);
             }
             StringToReturn.add("Hello "+ newName+"! ");
 
+        }
+        else{
+            if ((s.toLowerCase().contains("she's") || s.toLowerCase().contains("he's") || s.toLowerCase().contains("it's"))){
+                int indexOfIs = 0;
+                String newName;
+                while (s.toLowerCase().indexOf("'s ", indexOfIs+1)!= -1){
+                    indexOfIs = s.toLowerCase().indexOf("'s ", indexOfIs+1);
+                }
+                if (s.toLowerCase().indexOf(" ", indexOfIs+3)!=-1){
+                    newName = s.substring(indexOfIs+3, s.indexOf( " ", indexOfIs+3));
+                }
+                else{
+                    newName = s.substring(indexOfIs+3);
+                }
+                StringToReturn.add("Hello "+ newName+"! ");
+
+            }
         }
         if (s.toLowerCase().contains("what time is it now")|| s.toLowerCase().contains("could you tell me the time")){
             StringToReturn.add("It is "+ LocalDateTime.now().toLocalTime().getHour() +" hour, "+ LocalDateTime.now().toLocalTime().getMinute()+" minutes");
