@@ -363,15 +363,22 @@ public class MainActivity extends AppCompatActivity {
             List<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
             final String string = matches.get(0).toString();
             if (!string.isEmpty() && string != null){
+                for (String s: myModel.ResponceOne(string))
+                {
+                    if (s.contains("I have deleted all your overdue records")){
+                        new DeleteOverdueItems().execute(1);
+                        break;
+                    }
+                }
                 if (myModel.ResponceOne(string).contains("I have deleted all your overdue records")){
                     new DeleteOverdueItems().execute(1);
                 }
                 else{
-                    Log.d("AAAA", myModel.ResponceOne(string));
+                    Log.d("AAAA", myModel.ResponceOne(string).toString());
                 }
-                ArrayList<String> newstring = new ArrayList<String>();
-                newstring.add(myModel.ResponceOne(string));
-                Conversation(newstring);
+                //ArrayList<String> newstring = new ArrayList<String>();
+                //newstring.add(myModel.ResponceOne(string));
+                Conversation(myModel.ResponceOne(string));
             }
         }
 
