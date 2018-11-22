@@ -72,17 +72,18 @@ public class Model {
         if (s.contains("I")){
             int inddexOfI = s.indexOf("I");
             if ((s.charAt(inddexOfI+2) == 'm' || s.substring(inddexOfI+2, inddexOfI+4).matches("am")) && (s.contains("good") || s.contains("fine") || s.contains("okay"))) {
-                StringToReturn.add("Nice to hear");
+                StringToReturn.add("Nice to hear from you!");
             }
         }
 
         if (s.toLowerCase().contains("how are you")|| s.toLowerCase().contains("are you okay")||s.toLowerCase().contains("What's up")){
                 StringToReturn.add("I'm okay");
         }
-        if (s.toLowerCase().contains("you are stupid")){
-            StringToReturn.add("I am not stupid! I'm just too young to answer all your complicated questions. I'm like your little child.");
+        if (s.toLowerCase().contains("you")&&s.toLowerCase().contains("are")&&s.toLowerCase().contains("stupid") ){
+            StringToReturn.add("I am not stupid!");
+            StringToReturn.add("It's just hard to understand you!");
         }
-        if ((s.toLowerCase().contains("she is") || s.toLowerCase().contains("he is") || s.toLowerCase().contains("name is"))){
+        if (s.toLowerCase().contains("she is") || s.toLowerCase().contains("he is") || s.toLowerCase().contains("name is")){
             int indexOfIs = 0;
             String newName;
             while (s.toLowerCase().indexOf(" is ", indexOfIs+1)!= -1){
@@ -98,7 +99,7 @@ public class Model {
 
         }
         else{
-            if ((s.toLowerCase().contains("she's") || s.toLowerCase().contains("he's") || s.toLowerCase().contains("it's"))){
+            if (s.toLowerCase().contains("she's") || s.toLowerCase().contains("he's")){
                 int indexOfIs = 0;
                 String newName;
                 while (s.toLowerCase().indexOf("'s ", indexOfIs+1)!= -1){
@@ -120,7 +121,7 @@ public class Model {
         if (s.toLowerCase().contains("what day is it today")|| s.toLowerCase().contains("what day of week is it today") || s.toLowerCase().contains("what date is it today") || (s.toLowerCase().contains("is it") && (s.toLowerCase().contains("monday") || s.toLowerCase().contains("tuesday") || s.toLowerCase().contains("wednesday") || s.toLowerCase().contains("thursday") || s.toLowerCase().contains("friday") || s.toLowerCase().contains("saturday") || s.toLowerCase().contains("sunday")) && s.toLowerCase().contains("today"))){
             StringToReturn.add("It is "+ LocalDateTime.now().getDayOfWeek() +", "+ LocalDateTime.now().toLocalDate());
         }
-        if (s.toLowerCase().contains("gexa")  && (s.contains("delete")|| s.contains("remove")||s.contains("clear") ) && (s.contains("events")||s.contains("records")||s.contains("plans")||s.contains("items"))&&(s.contains("expired")||s.contains("old")||s.contains("overdue")||s.contains("passed"))){
+        if ( (s.contains("delete")|| s.contains("remove")||s.contains("clean") ) && (s.contains("events")||s.contains("records")||s.contains("plans")||s.contains("items"))&&(s.contains("expired")||s.contains("old")||s.contains("overdue")||s.contains("passed"))){
             if (overdueItemArrayList.size()==0){
                 StringToReturn.add("Hmm, you have no any averdue records. What else can I do for you today?");
             }
@@ -140,17 +141,19 @@ public class Model {
         }
 
          if ((s.contains("yes") && (s.contains("I do") || s.contains("confirmed") || s.contains("remove them")||s.contains("do it") ))){
-             StringToReturn.add("Okay, I have deleted all your overdue records. What else can I do for you?");
+             StringToReturn.add("Okay, I have deleted all your overdue records.");
+             StringToReturn.add("What else can I do for you?");
              Order = "Remove!";
          }
          if (s.contains("bye") || s.contains("see you")|| s.contains("shut up")|| s.contains("get away")|| s.contains("go away") || s.contains("do nothing")) {
             Order = "bye";
-            StringToReturn.add("Okay, bye-bye");
+            StringToReturn.add("Okay, bye!");
 
          }
 
-         if (s.contains("my")&&(s.contains("plans")||s.contains("events")||s.contains("records")) &&(s.contains("tell")|| s.contains("remind")||s.contains("read"))){
-            if ((s.contains("for"))){
+         if (((s.contains("tell")|| s.contains("remind")|| s.contains("let me know")||s.contains("read")) && s.contains("my")
+                 &&(s.contains("plans")||s.contains("events")||s.contains("records"))) || s.contains("what I have to do")){
+            if (s.contains("for")||s.contains("what I have to do") ){
                 if (s.contains("today")){
                     Order = "Plans";
                     StringToReturn.add("Okay!");
@@ -174,7 +177,7 @@ public class Model {
                 }
             }
             else{
-                if (s.contains("old")||s.contains("expired")||s.contains("passed")||s.contains("overdue")){
+                if (s.contains("old")||s.contains("expired")||s.contains("passed")||s.contains("overdue")||s.contains("missed")){
                     Order = "Plans";
                     StringToReturn.add("Okay!");
                     StringToReturn.addAll(TextToVoice("overdue"));
